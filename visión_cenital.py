@@ -13,6 +13,7 @@ Código principal:
     Pasos de ejecución de funciones:
         1.  Vamos a preprocesar el frame
         2.  Detectamos los códigos aruco
+            2.1 calculamos los centros de ellos, y los almacenamos en una lista
         3.  Calculammos una homografía utilizando los 4 arucos del medio, cogeremos las 4 esquinas de cada aruco
             A estos les asignaremos una id en específico
         4. Calculamos una homografía y cambiamos el frame en crudo por el frame al que se le ha aplicado la homografía
@@ -39,7 +40,7 @@ Código principal:
                             - Qué lata llevamos
                             - Cuál es nuestro origen
                             - Cuál es el destino objetivo
-                        7.1.1.2.2 Llamamos a la función en la que vamos a aplicar un algoritmo A*que permite que el robot navegue:
+                        7.1.1.2.2 Llamamos a la función en la que vamos a aplicar un algoritmo A* que permite que el robot navegue:
                             // Cada acción hará referencia a un estado y formarán un grafo
                                 ·- Estados:
                                     -Recto
@@ -51,8 +52,6 @@ Código principal:
                             // Cada vez que se llegue a un estado:
                             7.1.1.2.2.1 Publicamos en [Topic --> info_camara_mover_lata]
                                 - La orden que se asocia con los estados
-
-                        
                 7.1.2 Moverse a lata: Topic --> info_mover_a_lata
                     7.1.1.1 Topic
                         7.1.1.1.1 Información que se recibe [Topic --> info_robot_mover_a_lata]
@@ -75,7 +74,7 @@ import cv2
 import numpy as np
 import rospy
 from sensor_msgs.msg import Image
-from std_msgs.msg import Int32, Bool
+from std_msgs.msg import String, Bool
 
 def order_points(pts):
     """
@@ -124,7 +123,7 @@ class EvitarRobot:
 
         # Subscripciones y publicaciones ROS
         self.sub   = rospy.Subscriber("/csi_cam_0/image_raw", Image, self.cb, queue_size=1)
-        self.alert_pub  = rospy.Publisher("/alerta_robot",     Int32, queue_size=1)
+        self.alert_pub = rospy.Publisher("/alerta_robot", String, queue_size=1)
         self.pickup_pub = rospy.Publisher("/go_pickup",        Bool,  queue_size=1)
 
         # Timers periódicos para lógica auxiliar
@@ -192,9 +191,9 @@ class EvitarRobot:
                             ((p1[0]+p2[0])//2, (p1[1]+p2[1])//2),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,255),2)
                 cv2.circle(frame, p1, int(self.threshold_distance_r1_r2), (0,0,255),2)
-                flag = 1 if d < self.threshold_distance_r1_r2 else 0
-                print("[DIST] %.1f < %d -> alerta=%d"%(d, self.threshold_distance_r1_r2, flag))
-                self.alert_pub.publish(Int32(flag))
+                flag = "Recto" if d < self.threshold_distance_r1_r2 else "Nada"
+                print("[DIST] %.1f < %d -> alerta=%s"%(d, self.threshold_distance_r1_r2, flag))
+                self.alert_pub.publish(String(data=flag))
 
         cv2.imshow("live", frame)
         cv2.waitKey(1)
