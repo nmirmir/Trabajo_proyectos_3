@@ -7,6 +7,7 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import String, Bool
 import os
 import heapq
+import json
 
 '''
 
@@ -363,8 +364,7 @@ class Navegacion_Robot:
                     rospy.loginfo("Parámetros de calibración cargados")
                     return True
                 else:
-                    rospy.logwarn("Tamaño de frame en calibración (%s) no coincide con actual (%s)",
-                               tuple(saved_size), self.frame_size)
+                    rospy.logwarn("Tamaño de frame en calibración (%s) no coincide con actual (%s)",tuple(saved_size), self.frame_size)
             return False
         except Exception as e:
             rospy.logerr("Error al cargar calibración: %s", str(e))
@@ -390,12 +390,24 @@ class Navegacion_Robot:
             topic_type: Tipo de topic ('mover_lata' o 'mover_a_lata')
         """
         try:
-            # Parsear el mensaje recibido (formato: "clave1:valor1,clave2:valor2,...")
-            data = {}
-            for item in msg.data.split(','):
-                if ':' in item:
-                    key, value = item.split(':')
-                    data[key.strip()] = value.strip()
+            # Intentar parsear como JSON
+            try:
+                # Convertir a diccionario de Python
+                data = json.loads(msg.data)
+                
+                # Mapear claves si es necesario
+                if 'alm1' in data:
+                    data['origen'] = data['alm1']
+                if 'alm2' in data:
+                    data['destino'] = data['alm2']
+                
+            except ValueError:
+                # Si falla, intentar con el formato original clave:valor
+                data = {}
+                for item in msg.data.split(','):
+                    if ':' in item:
+                        key, value = item.split(':')
+                        data[key.strip()] = value.strip()
             
             rospy.loginfo("Recibido mensaje de %s: %s", topic_type, data)
             
