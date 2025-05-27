@@ -1,0 +1,25 @@
+# Jetson Nano Ubuntu 18.04 Python 2.7 Requirements
+
+# ROS dependencies (install via apt-get)
+# sudo apt-get update
+# sudo apt-get install ros-melodic-desktop-full
+# sudo apt-get install ros-melodic-cv-bridge
+# sudo apt-get install ros-melodic-image-transport
+# sudo apt-get install python-rospy
+# sudo apt-get install python-cv-bridge
+
+# OpenCV is typically pre-installed on Jetson Nano
+# If you need to install/update OpenCV 3.1:
+# sudo apt-get install python-opencv
+# sudo apt-get install libopencv-dev
+
+# Python 2.7 dependencies (use pip2)
+# pip2 install numpy==1.16.6  # Last version supporting Python 2.7
+
+# Note: On Jetson Nano, OpenCV 3.1 should be pre-installed
+# Verify with: python2 -c "import cv2; print(cv2.__version__)"
+
+# Additional useful packages for Jetson Nano
+# sudo apt-get install python-numpy
+# sudo apt-get install python-scipy
+# sudo apt-get install python-matplotlib 

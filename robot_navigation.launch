@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Robot Navigation System Launch File -->
+    
+    <!-- Parameters -->
+    <param name="robot_navigation/frame_width" value="640" />
+    <param name="robot_navigation/frame_height" value="480" />
+    <param name="robot_navigation/robot_id" value="15" />
+    <param name="robot_navigation/destination_threshold" value="50" />
+    
+    <!-- Camera node (adjust based on your camera setup) -->
+    <node name="camera_node" pkg="usb_cam" type="usb_cam_node" output="screen">
+        <param name="video_device" value="/dev/video0" />
+        <param name="image_width" value="640" />
+        <param name="image_height" value="480" />
+        <param name="pixel_format" value="yuyv" />
+        <param name="camera_frame_id" value="usb_cam" />
+        <param name="io_method" value="mmap"/>
+        <remap from="/usb_cam/image_raw" to="/csi_cam_0/image_raw" />
+    </node>
+    
+    <!-- Robot Navigation Node -->
+    <node name="robot_navigation" pkg="robot_navigation" type="visión_cenitalV1_improved.py" output="screen">
+        <remap from="/csi_cam_0/image_raw" to="/csi_cam_0/image_raw" />
+    </node>
+    
+    <!-- Optional: Image view for debugging -->
+    <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="/csi_cam_0/image_raw" />
+    </node>
+    
+</launch> 

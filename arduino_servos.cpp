@@ -24,7 +24,8 @@ void setup() {
 void loop() {
   // Verifica si hay datos disponibles en el puerto serie
   if (Serial.available() > 0) {
-    String command = Serial.readStringUntil('\n'); // Lee el comando hasta el salto de línea
+    String command = Serial.readStringUntil('\n');
+    command.trim(); // Elimina espacios o caracteres invisibles
     
     // Verifica el comando recibido
     if (command == "Abierto") {
@@ -43,5 +44,8 @@ void loop() {
       // Si el comando no es reconocido
       Serial.println("Comando no reconocido. Usa 'Abierto' o 'Cerrado'.");
     }
+    
+    // Pequeño retraso para permitir que el buffer se vacíe
+    delay(50);
   }
 }

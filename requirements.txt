@@ -1,0 +1,9 @@
+# ROS dependencies (install via apt-get)
+# sudo apt-get install ros-melodic-desktop-full
+# sudo apt-get install ros-melodic-cv-bridge
+# sudo apt-get install ros-melodic-image-transport
+
+# Python dependencies
+opencv-python>=4.5.0
+opencv-contrib-python>=4.5.0
+numpy>=1.19.0 

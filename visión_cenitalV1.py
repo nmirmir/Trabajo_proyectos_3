@@ -31,6 +31,8 @@ Clasificación de ARUCOS:
     ZONA 7: ID = 7
     ZONA 8: ID = 8
 
+    ID Robot: 15
+
     Código Launch:
     1. Llama al código que calibra la cámara
     2. publica la información en un 
@@ -555,8 +557,8 @@ class Navegacion_Robot:
             
             # Determinamos la posición actual del robot (posición del ArUco del robot)
             pos_robot = None
-            # Buscar ArUco del robot (asumimos ID 15, ajusta según tu caso)
-            robot_id = 15
+            # Buscar ArUco del robot 
+            robot_id = 0
             for zona_id, zona_info in self.info_zonas.items():
                 for aruco in zona_info['arucos']:
                     if aruco['aruco_id'] == robot_id:
