@@ -112,6 +112,7 @@ class Navegacion_Robot:
         self.load_calibration()
         
         rospy.loginfo("Robot Navigation System initialized with orientation tracking")
+        rospy.loginfo("Robot ArUco ID set to: %d", self.robot_id)
 
     def preprocess_frame(self, frame):
         """
@@ -166,6 +167,10 @@ class Navegacion_Robot:
             corners, ids, _ = cv2.aruco.detectMarkers(frame, aruco_dict, parameters=parameters)
 
             if ids is not None:
+                # DEBUG: Print all detected ArUco IDs
+                detected_ids = ids.flatten().tolist()
+                rospy.loginfo_throttle(2, "Detected ArUco IDs: %s", detected_ids)
+                
                 for i, id_ in enumerate(ids.flatten()):
                     c = corners[i]
                     centro = tuple(np.mean(c.reshape(4, 2), axis=0).astype(int))
@@ -194,6 +199,7 @@ class Navegacion_Robot:
                     # Robot ArUco (ID 15 conflicts with zone mapping!)
                     # Need to change robot ID to avoid conflict with zone 7 (ID 15)
                     elif id_ == self.robot_id:
+                        rospy.loginfo_throttle(1, "Robot ArUco detected! ID: %d at position: %s", id_, centro)
                         # Find which zone the robot is in and add it there
                         # This is a simplified assignment - in practice, you'd determine
                         # the actual zone based on robot position within zone boundaries

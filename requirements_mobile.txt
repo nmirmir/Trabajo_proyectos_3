@@ -1,0 +1,22 @@
+# Requirements for Mobile Camera Robot Navigation System
+# Works with or without ROS
+
+# Core computer vision
+opencv-python>=3.4.0
+numpy>=1.16.0
+
+# Optional: ROS dependencies (install only if using ROS)
+# rospy
+# sensor_msgs  
+# std_msgs
+# cv_bridge
+
+# System utilities
+argparse  # Usually included in Python standard library
+threading  # Usually included in Python standard library
+time  # Usually included in Python standard library
+json  # Usually included in Python standard library
+os  # Usually included in Python standard library
+
+# For Python 2.7 compatibility (if needed)
+# opencv-python==3.4.18.65  # Last version supporting Python 2.7 
